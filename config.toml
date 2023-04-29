@@ -14,21 +14,21 @@ paginate = 10
 
   disableReadOtherPosts = false
   enableSharingButtons = false
-  enableGlobalLanguageMenu = false
+  enableGlobalLanguageMenu = true
 
   description = "Resume and portfolio"
   keywords = "homepage, resume, portfolio"
   images = [""]
 
 [taxonomies]
-    category = "resume"
+    category = "resume, portfolio"
     tag      = "tags"
 
 [languages]
   [languages.en]
     title = "Wittebol.be"
-    subtitle = ""
-    keywords = ""
+    subtitle = "IT Operations consultant"
+    keywords = "homepage, resume, portfolio"
     copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
     readOtherPosts = "Read other posts"
 

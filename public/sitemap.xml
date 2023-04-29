@@ -8,17 +8,10 @@
     <loc>localhost/resume/</loc>
     <lastmod>2023-04-29T10:22:05+02:00</lastmod>
   </url><url>
-    <loc>localhost/posts/my-first-post/</loc>
-    <lastmod>2023-04-29T10:00:13+02:00</lastmod>
-  </url><url>
-    <loc>localhost/posts/</loc>
-    <lastmod>2023-04-29T10:00:13+02:00</lastmod>
-  </url><url>
-    <loc>localhost/</loc>
-    <lastmod>2023-04-29T10:00:13+02:00</lastmod>
-  </url><url>
-    <loc>localhost/resume/</loc>
+    <loc>localhost/resume-portfolio/</loc>
   </url><url>
     <loc>localhost/tags/</loc>
+  </url><url>
+    <loc>localhost/</loc>
   </url>
 </urlset>
