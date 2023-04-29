@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>wittebol.be</title>
-    <link>http://example.org/</link>
-    <description>Recent content on wittebol.be</description>
+    <title>Wittebol.be</title>
+    <link>localhost/</link>
+    <description>Recent content on Wittebol.be</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Apr 2023 10:00:13 +0200</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Sat, 29 Apr 2023 10:00:13 +0200</lastBuildDate><atom:link href="localhost/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Portfolio</title>
+      <link>localhost/portfolio/</link>
+      <pubDate>Sat, 29 Apr 2023 10:22:14 +0200</pubDate>
+      
+      <guid>localhost/portfolio/</guid>
+      <description>Portfolio </description>
+    </item>
+    
+    <item>
+      <title>Resume</title>
+      <link>localhost/resume/</link>
+      <pubDate>Sat, 29 Apr 2023 10:22:05 +0200</pubDate>
+      
+      <guid>localhost/resume/</guid>
+      <description>Resume </description>
+    </item>
+    
     <item>
       <title>My First Post</title>
-      <link>http://example.org/posts/my-first-post/</link>
+      <link>localhost/posts/my-first-post/</link>
       <pubDate>Sat, 29 Apr 2023 10:00:13 +0200</pubDate>
       
-      <guid>http://example.org/posts/my-first-post/</guid>
+      <guid>localhost/posts/my-first-post/</guid>
       <description>Introduction This is bold text, and this is emphasized text.
 Visit the Hugo website!</description>
     </item>

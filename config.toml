@@ -1,4 +1,52 @@
-baseURL = 'http://example.org/'
+baseURL = 'localhost'
 languageCode = 'en-us'
 title = 'wittebol.be'
-theme = 'ananke'
+theme = 'hello-friend-ng'
+paginate = 10
+
+[params]
+  dateform        = "Jan 2, 2006"
+  dateformShort   = "Jan 2"
+  dateformNum     = "2006-01-02"
+  dateformNumTime = "2006-01-02 15:04"
+
+  homeSubtitle = "IT Operations consultant"
+
+  disableReadOtherPosts = false
+  enableSharingButtons = false
+  enableGlobalLanguageMenu = false
+
+  description = "Resume and portfolio"
+  keywords = "homepage, resume, portfolio"
+  images = [""]
+
+[taxonomies]
+    category = "resume"
+    tag      = "tags"
+
+[languages]
+  [languages.en]
+    title = "Wittebol.be"
+    subtitle = ""
+    keywords = ""
+    copyright = '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
+    readOtherPosts = "Read other posts"
+
+    [languages.en.params.logo]
+      logoText = "wittebol.be"
+      logoHomeLink = "/"
+    # or
+    #
+    # path = "/img/your-example-logo.svg"
+    # alt = "Your example logo alt text"
+
+  [[menu.main]]
+    identifier = "resume"
+    name       = "resume"
+    url        = "/resume"
+    weight = 10
+  [[menu.main]]
+    identifier = "portfolio"
+    name       = "portfolio"
+    url        = "/portfolio"
+    weight = 20
