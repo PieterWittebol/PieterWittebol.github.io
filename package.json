@@ -17,6 +17,8 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/svelte": "^7.2.5",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/merriweather": "^5.2.11",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
