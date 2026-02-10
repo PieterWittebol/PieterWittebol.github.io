@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import PhotoCard from '../../components/PhotoCard.astro';
+
+const photos = (await getCollection('photography'))
+  .filter((entry) => !entry.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const photosWithFull = await Promise.all(
+  photos.map(async (photo) => {
+    const optimized = await getImage({ src: photo.data.image, width: 1600, format: 'webp', quality: 85 });
+    return {
+      ...photo,
+      full: {
+        src: optimized.src,
+        width: optimized.attributes.width ?? 1600,
+        height: optimized.attributes.height ?? 1200,
+      },
+    };
+  }),
+);
+---
+
+<Layout title="Photography" description="A portfolio of moments captured through the lens.">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <h1 class="text-3xl sm:text-4xl font-bold text-primary-900 mb-10">
+      Photography
+    </h1>
+
+    {photosWithFull.length > 0 ? (
+      <div id="gallery" class="pswp-gallery grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {photosWithFull.map((photo, index) => (
+          <PhotoCard
+            image={photo.data.image}
+            title={photo.data.title}
+            location={photo.data.location}
+            camera={photo.data.camera}
+            tags={photo.data.tags}
+            fullSrc={photo.full.src}
+            fullWidth={photo.full.width}
+            fullHeight={photo.full.height}
+            index={index}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-primary-500 text-center py-12">
+        No photos yet. Check back soon.
+      </p>
+    )}
+  </div>
+</Layout>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  });
+
+  // Custom caption support
+  lightbox.on('uiRegister', () => {
+    lightbox.pswp!.ui!.registerElement({
+      name: 'caption',
+      order: 9,
+      isButton: false,
+      appendTo: 'root',
+      html: '',
+      onInit: (el) => {
+        el.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;text-align:center;font-size:14px;line-height:1.5;pointer-events:none;';
+        lightbox.pswp!.on('change', () => {
+          const slide = lightbox.pswp!.currSlide;
+          const caption = slide?.data?.element?.getAttribute('data-caption') ?? '';
+          el.innerHTML = caption;
+        });
+      },
+    });
+  });
+
+  lightbox.init();
+</script>

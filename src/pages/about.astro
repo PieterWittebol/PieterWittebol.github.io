@@ -1,0 +1,119 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('about', 'index');
+if (!entry) throw new Error('About page content not found');
+
+const { Content } = await render(entry);
+const { name, title, experience, education, certifications, skills, languages } = entry.data;
+---
+
+<Layout title="About Me" description={`About ${name} — ${title.toLowerCase()}, photographer, and woodworker.`}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Intro -->
+    <section class="mb-12">
+      <h1 class="text-3xl sm:text-4xl font-bold text-primary-900 mb-2">
+        {name}
+      </h1>
+      <p class="text-lg text-primary-600 mb-6">
+        {title}
+      </p>
+      <div class="prose prose-stone max-w-none text-primary-700">
+        <Content />
+      </div>
+    </section>
+
+    <div class="grid gap-12 lg:grid-cols-[1fr_280px]">
+      <!-- Main column -->
+      <div class="space-y-10">
+        <!-- Experience -->
+        <section>
+          <h2 class="text-xl font-bold text-primary-800 mb-6 border-b border-primary-200 pb-2">
+            Experience
+          </h2>
+          <div class="space-y-6">
+            {experience.map(({ role, company, period, description, assignments }) => (
+              <div>
+                <h3 class="font-serif font-bold text-primary-900">{role}</h3>
+                <p class="text-sm text-primary-500 mb-1">{company} &middot; {period}</p>
+                {description && <p class="text-primary-700 text-sm">{description}</p>}
+                {assignments.length > 0 && (
+                  <div class="ml-4 mt-3 space-y-4 border-l-2 border-primary-200 pl-4">
+                    {assignments.map((a) => (
+                      <div>
+                        <h4 class="font-serif font-bold text-primary-800 text-sm">{a.role}</h4>
+                        <p class="text-xs text-primary-500 mb-1">{a.company} &middot; {a.period}</p>
+                        {a.description && <p class="text-primary-700 text-xs">{a.description}</p>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Education -->
+        <section>
+          <h2 class="text-xl font-bold text-primary-800 mb-6 border-b border-primary-200 pb-2">
+            Education
+          </h2>
+          <div class="space-y-4">
+            {education.map(({ degree, institution, period }) => (
+              <div>
+                <h3 class="font-serif font-bold text-primary-900">{degree}</h3>
+                <p class="text-sm text-primary-500">{institution} &middot; {period}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-8 lg:border-l lg:border-primary-200 lg:pl-8">
+        <!-- Certifications -->
+        <section>
+          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+            Certifications
+          </h2>
+          <ul class="space-y-1.5 text-sm text-primary-700">
+            {certifications.map((cert) => (
+              <li>{cert}</li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Skills -->
+        <section>
+          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+            Skills
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {skills.map((skill) => (
+              <span class="px-3 py-1 text-xs font-medium bg-primary-100 text-primary-700 rounded-full">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <!-- Languages -->
+        <section>
+          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+            Languages
+          </h2>
+          <ul class="space-y-1 text-sm text-primary-700">
+            {languages.map(({ name, level }) => (
+              <li>
+                <span class="font-medium">{name}</span>
+                <span class="text-primary-400"> — </span>
+                <span class="text-primary-500">{level}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+</Layout>

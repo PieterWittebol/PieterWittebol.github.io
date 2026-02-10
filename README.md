@@ -1,46 +1,63 @@
-# Astro Starter Kit: Basics
+# wittebol.be
 
-```sh
-pnpm create astro@latest -- --template basics
+Personal website for [wittebol.be](https://wittebol.be) — a portfolio and blog built with Astro.
+
+## Sections
+
+- **About Me** — curriculum vitae with experience, education, skills, and languages
+- **Photography** — photo gallery with PhotoSwipe lightbox viewer
+- **Woodworking** — blog for project builds and workshop journal entries
+
+## Tech Stack
+
+- [Astro 5](https://astro.build) — static site generator
+- [Svelte 5](https://svelte.dev) — interactive components (mobile nav)
+- [Tailwind CSS 4](https://tailwindcss.com) — utility-first styling
+- [PhotoSwipe 5](https://photoswipe.com) — image gallery lightbox
+- [Sharp](https://sharp.pixelplumbing.com) — image optimization via `astro:assets`
+
+## Project Structure
+
+```
+src/
+├── components/         Reusable UI components
+│   ├── Header.astro      Site header with navigation
+│   ├── Footer.astro      Site footer
+│   ├── Nav.svelte        Mobile hamburger menu
+│   ├── PhotoCard.astro   Photo gallery thumbnail
+│   ├── BlogCard.astro    Blog post card
+│   └── SEO.astro         Meta/OG tags
+├── content/            Markdown content collections
+│   ├── about/            CV data and intro text
+│   ├── photography/      Photo entries (markdown + co-located images)
+│   └── woodworking/      Blog posts (markdown + co-located images)
+├── content.config.ts   Collection schemas
+├── layouts/
+│   └── Layout.astro      Base HTML layout
+├── pages/
+│   ├── index.astro       Landing page
+│   ├── about.astro       About Me / CV
+│   ├── photography/      Photo gallery
+│   └── woodworking/      Blog listing and post pages
+└── styles/
+    └── global.css        Tailwind theme and base styles
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Content Management
 
-## 🚀 Project Structure
+All content is managed via Markdown files in `src/content/`:
 
-Inside of your Astro project, you'll see the following folders and files:
+- **Photography**: one `.md` file per photo with frontmatter (title, date, location, camera, tags) and a co-located image
+- **Woodworking**: one folder per post with `index.md` and an `images/` directory for inline photos
+- **About**: a single `index.md` with structured CV data in YAML frontmatter and an intro paragraph as the body
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+## Commands
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+All commands are run from the project root:
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command                | Action                                       |
+| :--------------------- | :------------------------------------------- |
+| `pnpm install`         | Install dependencies                         |
+| `pnpm dev --host`      | Start dev server at `localhost:4321`          |
+| `pnpm build`           | Build production site to `./dist/`           |
+| `pnpm preview --host`  | Preview the production build locally         |

@@ -1,0 +1,54 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  image: ImageMetadata;
+  title: string;
+  location?: string;
+  camera?: string;
+  tags?: string[];
+  fullSrc: string;
+  fullWidth: number;
+  fullHeight: number;
+  index: number;
+}
+
+const { image, title, location, camera, tags, fullSrc, fullWidth, fullHeight, index } = Astro.props;
+
+const captionParts: string[] = [];
+if (location) captionParts.push(location);
+if (camera) captionParts.push(camera);
+const caption = [
+  `<strong>${title}</strong>`,
+  captionParts.length > 0 ? `<br><small>${captionParts.join(' · ')}</small>` : '',
+  tags && tags.length > 0 ? `<br><small>${tags.join(', ')}</small>` : '',
+].join('');
+---
+
+<a
+  href={fullSrc}
+  data-pswp-width={fullWidth}
+  data-pswp-height={fullHeight}
+  data-caption={caption}
+  target="_blank"
+  class="group relative block w-full overflow-hidden rounded-lg bg-primary-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+>
+  <Image
+    src={image}
+    alt={title}
+    width={600}
+    densities={[1.5, 2]}
+    format="webp"
+    quality={80}
+    class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+    loading={index < 6 ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <div class="absolute bottom-0 left-0 right-0 p-3">
+      <p class="text-white text-sm font-medium">{title}</p>
+      {location && <p class="text-white/70 text-xs mt-0.5">{location}</p>}
+    </div>
+  </div>
+</a>

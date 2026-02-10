@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('woodworking');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = post.data.date.toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+>
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <!-- Hero image -->
+    <div class="rounded-lg overflow-hidden mb-8">
+      <Image
+        src={post.data.cover}
+        alt={post.data.title}
+        width={960}
+        densities={[1.5, 2]}
+        format="webp"
+        quality={85}
+        class="w-full h-auto"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <time datetime={post.data.date.toISOString()} class="text-sm text-primary-400">
+        {formattedDate}
+      </time>
+      <h1 class="text-3xl sm:text-4xl font-bold text-primary-900 mt-2 mb-4">
+        {post.data.title}
+      </h1>
+      {post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {post.data.tags.map((tag) => (
+            <span class="px-2.5 py-0.5 text-xs font-medium bg-primary-100 text-primary-600 rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Content -->
+    <div class="prose prose-stone max-w-none">
+      <Content />
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,43 @@
+---
+import Nav from './Nav.svelte';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About Me' },
+  { href: '/photography', label: 'Photography' },
+  { href: '/woodworking', label: 'Woodworking' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-primary-200 bg-primary-50/80 backdrop-blur-sm sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="font-serif text-xl font-bold text-primary-900 hover:text-primary-700 transition-colors">
+        Wittebol
+      </a>
+
+      <!-- Desktop navigation -->
+      <nav class="hidden md:flex items-center gap-8" aria-label="Main navigation">
+        {links.map(({ href, label }) => (
+          <a
+            href={href}
+            data-astro-prefetch
+            class:list={[
+              'text-sm font-medium transition-colors',
+              currentPath === href || (href !== '/' && currentPath.startsWith(href))
+                ? 'text-primary-900 border-b-2 border-primary-600 pb-0.5'
+                : 'text-primary-600 hover:text-primary-900',
+            ]}
+          >
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Mobile navigation -->
+      <Nav client:media="(max-width: 767px)" {links} {currentPath} />
+    </div>
+  </div>
+</header>

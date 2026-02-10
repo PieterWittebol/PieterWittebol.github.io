@@ -1,5 +1,25 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import svelte from '@astrojs/svelte';
+import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  site: 'https://wittebol.be',
+  prefetch: true,
+  markdown: {
+    shikiConfig: {
+      theme: 'github-light',
+    },
+  },
+  integrations: [svelte(), sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+    server: {
+      watch: {
+        usePolling: true,
+      },
+    },
+  },
+});
