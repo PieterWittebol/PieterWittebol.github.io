@@ -28,7 +28,7 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
 >
   <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
     <!-- Hero image -->
-    <div class="rounded-lg overflow-hidden mb-8">
+    <div class="rounded-lg overflow-hidden mb-8 animate-fade-in">
       <Image
         src={post.data.cover}
         alt={post.data.title}
@@ -38,21 +38,22 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
         quality={85}
         class="w-full h-auto"
         decoding="async"
+        transition:name={`cover-${post.id}`}
       />
     </div>
 
     <!-- Header -->
-    <header class="mb-8">
-      <time datetime={post.data.date.toISOString()} class="text-sm text-primary-400">
+    <header class="mb-8 animate-slide-up delay-100">
+      <time datetime={post.data.date.toISOString()} class="text-sm text-gray-400">
         {formattedDate}
       </time>
-      <h1 class="text-3xl sm:text-4xl font-bold text-primary-900 mt-2 mb-4">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2 mb-4" transition:name={`title-${post.id}`}>
         {post.data.title}
       </h1>
       {post.data.tags.length > 0 && (
         <div class="flex flex-wrap gap-2">
           {post.data.tags.map((tag) => (
-            <span class="px-2.5 py-0.5 text-xs font-medium bg-primary-100 text-primary-600 rounded-full">
+            <span class="px-2.5 py-0.5 text-xs font-medium bg-accent-50 text-accent-700 rounded-full">
               {tag}
             </span>
           ))}
@@ -61,7 +62,7 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
     </header>
 
     <!-- Content -->
-    <div class="prose prose-stone max-w-none">
+    <div class="prose max-w-none animate-slide-up delay-200">
       <Content />
     </div>
   </article>

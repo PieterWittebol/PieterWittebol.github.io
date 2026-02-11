@@ -13,13 +13,13 @@ const { name, title, experience, education, certifications, skills, languages } 
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
     <!-- Intro -->
     <section class="mb-12">
-      <h1 class="text-3xl sm:text-4xl font-bold text-primary-900 mb-2">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 animate-fade-in">
         {name}
       </h1>
-      <p class="text-lg text-primary-600 mb-6">
+      <p class="text-lg text-gray-500 mb-6 animate-fade-in delay-100">
         {title}
       </p>
-      <div class="prose prose-stone max-w-none text-primary-700">
+      <div class="prose max-w-none text-gray-700 animate-slide-up delay-200">
         <Content />
       </div>
     </section>
@@ -29,22 +29,22 @@ const { name, title, experience, education, certifications, skills, languages } 
       <div class="space-y-10">
         <!-- Experience -->
         <section>
-          <h2 class="text-xl font-bold text-primary-800 mb-6 border-b border-primary-200 pb-2">
+          <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
             Experience
           </h2>
           <div class="space-y-6">
             {experience.map(({ role, company, period, description, assignments }) => (
               <div>
-                <h3 class="font-serif font-bold text-primary-900">{role}</h3>
-                <p class="text-sm text-primary-500 mb-1">{company} &middot; {period}</p>
-                {description && <p class="text-primary-700 text-sm">{description}</p>}
+                <h3 class="font-bold text-gray-900">{role}</h3>
+                <p class="text-sm text-gray-400 mb-1">{company} &middot; {period}</p>
+                {description && <p class="text-gray-700 text-sm">{description}</p>}
                 {assignments.length > 0 && (
-                  <div class="ml-4 mt-3 space-y-4 border-l-2 border-primary-200 pl-4">
+                  <div class="ml-4 mt-3 space-y-4 border-l-2 border-accent-200 pl-4">
                     {assignments.map((a) => (
                       <div>
-                        <h4 class="font-serif font-bold text-primary-800 text-sm">{a.role}</h4>
-                        <p class="text-xs text-primary-500 mb-1">{a.company} &middot; {a.period}</p>
-                        {a.description && <p class="text-primary-700 text-xs">{a.description}</p>}
+                        <h4 class="font-bold text-gray-800 text-sm">{a.role}</h4>
+                        <p class="text-xs text-gray-400 mb-1">{a.company} &middot; {a.period}</p>
+                        {a.description && <p class="text-gray-700 text-xs">{a.description}</p>}
                       </div>
                     ))}
                   </div>
@@ -56,14 +56,14 @@ const { name, title, experience, education, certifications, skills, languages } 
 
         <!-- Education -->
         <section>
-          <h2 class="text-xl font-bold text-primary-800 mb-6 border-b border-primary-200 pb-2">
+          <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
             Education
           </h2>
           <div class="space-y-4">
             {education.map(({ degree, institution, period }) => (
               <div>
-                <h3 class="font-serif font-bold text-primary-900">{degree}</h3>
-                <p class="text-sm text-primary-500">{institution} &middot; {period}</p>
+                <h3 class="font-bold text-gray-900">{degree}</h3>
+                <p class="text-sm text-gray-400">{institution} &middot; {period}</p>
               </div>
             ))}
           </div>
@@ -71,13 +71,13 @@ const { name, title, experience, education, certifications, skills, languages } 
       </div>
 
       <!-- Sidebar -->
-      <aside class="space-y-8 lg:border-l lg:border-primary-200 lg:pl-8">
+      <aside class="space-y-8 lg:border-l lg:border-gray-200 lg:pl-8">
         <!-- Certifications -->
         <section>
-          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2 lg:border-b-0">
             Certifications
           </h2>
-          <ul class="space-y-1.5 text-sm text-primary-700">
+          <ul class="space-y-1.5 text-sm text-gray-700">
             {certifications.map((cert) => (
               <li>{cert}</li>
             ))}
@@ -86,12 +86,12 @@ const { name, title, experience, education, certifications, skills, languages } 
 
         <!-- Skills -->
         <section>
-          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2 lg:border-b-0">
             Skills
           </h2>
           <div class="flex flex-wrap gap-2">
             {skills.map((skill) => (
-              <span class="px-3 py-1 text-xs font-medium bg-primary-100 text-primary-700 rounded-full">
+              <span class="px-3 py-1 text-xs font-medium bg-accent-50 text-accent-800 rounded-full">
                 {skill}
               </span>
             ))}
@@ -100,15 +100,15 @@ const { name, title, experience, education, certifications, skills, languages } 
 
         <!-- Languages -->
         <section>
-          <h2 class="text-xl font-bold text-primary-800 mb-4 border-b border-primary-200 pb-2 lg:border-b-0">
+          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2 lg:border-b-0">
             Languages
           </h2>
-          <ul class="space-y-1 text-sm text-primary-700">
+          <ul class="space-y-1 text-sm text-gray-700">
             {languages.map(({ name, level }) => (
               <li>
                 <span class="font-medium">{name}</span>
-                <span class="text-primary-400"> — </span>
-                <span class="text-primary-500">{level}</span>
+                <span class="text-gray-300"> — </span>
+                <span class="text-gray-500">{level}</span>
               </li>
             ))}
           </ul>

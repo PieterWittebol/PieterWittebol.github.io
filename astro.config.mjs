@@ -10,16 +10,12 @@ export default defineConfig({
   prefetch: true,
   markdown: {
     shikiConfig: {
-      theme: 'github-light',
+      theme: 'rose-pine-dawn',
     },
   },
   integrations: [svelte(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
-    server: {
-      watch: {
-        usePolling: true,
-      },
-    },
+    cacheDir: '/tmp/vite-wittebol',
   },
 });

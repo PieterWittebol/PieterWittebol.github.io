@@ -11,11 +11,29 @@ const links = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="border-b border-primary-200 bg-primary-50/80 backdrop-blur-sm sticky top-0 z-50">
+<header class="border-b border-accent-900 bg-accent-950 backdrop-blur-sm sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      <a href="/" class="font-serif text-xl font-bold text-primary-900 hover:text-primary-700 transition-colors">
-        Wittebol
+      <a href="/" class="flex items-center gap-2.5 group">
+        <svg class="w-8 h-8 shrink-0 drop-shadow-sm" viewBox="0 0 128 128" aria-hidden="true">
+          <defs>
+            <radialGradient id="hdr-sphere" cx="40%" cy="35%" r="55%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="50%" stop-color="#f4f4f5"/>
+              <stop offset="85%" stop-color="#d4d4d8"/>
+              <stop offset="100%" stop-color="#a1a1aa"/>
+            </radialGradient>
+            <radialGradient id="hdr-hl" cx="35%" cy="30%" r="25%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="64" cy="64" r="52" fill="url(#hdr-sphere)"/>
+          <circle cx="52" cy="48" r="20" fill="url(#hdr-hl)"/>
+        </svg>
+        <span class="text-xl font-bold text-white group-hover:text-accent-200 transition-colors tracking-tight">
+          Wittebol
+        </span>
       </a>
 
       <!-- Desktop navigation -->
@@ -27,8 +45,8 @@ const currentPath = Astro.url.pathname;
             class:list={[
               'text-sm font-medium transition-colors',
               currentPath === href || (href !== '/' && currentPath.startsWith(href))
-                ? 'text-primary-900 border-b-2 border-primary-600 pb-0.5'
-                : 'text-primary-600 hover:text-primary-900',
+                ? 'text-white border-b-2 border-accent-300 pb-0.5'
+                : 'text-accent-200 hover:text-white',
             ]}
           >
             {label}
