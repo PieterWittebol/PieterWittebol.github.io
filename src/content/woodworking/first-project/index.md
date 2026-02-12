@@ -4,7 +4,7 @@ description: "A placeholder post demonstrating the blog format and markdown feat
 date: 2025-08-15
 cover: ./images/cover.jpg
 tags: ["furniture", "sample"]
-draft: false
+draft: true
 ---
 
 This is a placeholder blog post. Replace it with your actual woodworking content.

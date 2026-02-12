@@ -3,117 +3,141 @@ import Layout from '../layouts/Layout.astro';
 import { getEntry, render } from 'astro:content';
 
 const entry = await getEntry('about', 'index');
-if (!entry) throw new Error('About page content not found');
 
-const { Content } = await render(entry);
-const { name, title, experience, education, certifications, skills, languages } = entry.data;
+let Content: any = null;
+let name = '';
+let title = '';
+let experience: any[] = [];
+let education: any[] = [];
+let certifications: string[] = [];
+let skills: string[] = [];
+let languages: any[] = [];
+
+if (entry) {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+  ({ name, title, experience, education, certifications, skills, languages } = entry.data);
+}
 ---
 
-<Layout title="About Me" description={`About ${name} — ${title.toLowerCase()}, photographer, and woodworker.`}>
+<Layout title="About Me" description={entry ? `About ${name} — ${title.toLowerCase()}, photographer, and woodworker.` : 'About me'}>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <!-- Intro -->
-    <section class="mb-12">
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 animate-fade-in">
-        {name}
-      </h1>
-      <p class="text-lg text-gray-500 mb-6 animate-fade-in delay-100">
-        {title}
-      </p>
-      <div class="prose max-w-none text-gray-700 animate-slide-up delay-200">
-        <Content />
-      </div>
-    </section>
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-10 animate-fade-in">
+      About Me
+    </h1>
 
-    <div class="grid gap-12 lg:grid-cols-[1fr_280px]">
-      <!-- Main column -->
-      <div class="space-y-10 bg-white rounded-xl p-6 sm:p-8 shadow-md border border-gray-200">
-        <!-- Experience -->
-        <section>
-          <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
-            Experience
+    {entry ? (
+      <>
+        <!-- Intro -->
+        <section class="mb-12">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2 animate-fade-in">
+            {name}
           </h2>
-          <div class="space-y-6">
-            {experience.map(({ role, company, period, description, assignments }) => (
-              <div>
-                <h3 class="font-bold text-gray-900">{role}</h3>
-                <p class="text-sm text-gray-400 mb-1">{company} &middot; {period}</p>
-                {description && <p class="text-gray-700 text-sm">{description}</p>}
-                {assignments.length > 0 && (
-                  <div class="ml-4 mt-3 space-y-4 border-l-2 border-accent-200 pl-4">
-                    {assignments.map((a) => (
-                      <div>
-                        <h4 class="font-bold text-gray-800 text-sm">{a.role}</h4>
-                        <p class="text-xs text-gray-400 mb-1">{a.company} &middot; {a.period}</p>
-                        {a.description && <p class="text-gray-700 text-xs">{a.description}</p>}
+          <p class="text-lg text-gray-500 mb-6 animate-fade-in delay-100">
+            {title}
+          </p>
+          <div class="prose max-w-none text-gray-700 animate-slide-up delay-200">
+            <Content />
+          </div>
+        </section>
+
+        <div class="grid gap-12 lg:grid-cols-[1fr_280px]">
+          <!-- Main column -->
+          <div class="space-y-10 bg-white rounded-xl p-6 sm:p-8 shadow-md border border-gray-200">
+            <!-- Experience -->
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
+                Experience
+              </h2>
+              <div class="space-y-6">
+                {experience.map(({ role, company, period, description, assignments }) => (
+                  <div>
+                    <h3 class="font-bold text-gray-900">{role}</h3>
+                    <p class="text-sm text-gray-400 mb-1">{company} &middot; {period}</p>
+                    {description && <p class="text-gray-700 text-sm">{description}</p>}
+                    {assignments.length > 0 && (
+                      <div class="ml-4 mt-3 space-y-4 border-l-2 border-accent-200 pl-4">
+                        {assignments.map((a) => (
+                          <div>
+                            <h4 class="font-bold text-gray-800 text-sm">{a.role}</h4>
+                            <p class="text-xs text-gray-400 mb-1">{a.company} &middot; {a.period}</p>
+                            {a.description && <p class="text-gray-700 text-xs">{a.description}</p>}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
 
-        <!-- Education -->
-        <section>
-          <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
-            Education
-          </h2>
-          <div class="space-y-4">
-            {education.map(({ degree, institution, period }) => (
-              <div>
-                <h3 class="font-bold text-gray-900">{degree}</h3>
-                <p class="text-sm text-gray-400">{institution} &middot; {period}</p>
+            <!-- Education -->
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
+                Education
+              </h2>
+              <div class="space-y-4">
+                {education.map(({ degree, institution, period }) => (
+                  <div>
+                    <h3 class="font-bold text-gray-900">{degree}</h3>
+                    <p class="text-sm text-gray-400">{institution} &middot; {period}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </section>
           </div>
-        </section>
+
+          <!-- Sidebar -->
+          <aside class="space-y-8 bg-white rounded-xl p-6 shadow-md border border-gray-200 h-fit">
+            <!-- Certifications -->
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+                Certifications
+              </h2>
+              <ul class="space-y-1.5 text-sm text-gray-700">
+                {certifications.map((cert) => (
+                  <li>{cert}</li>
+                ))}
+              </ul>
+            </section>
+
+            <!-- Skills -->
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+                Skills
+              </h2>
+              <div class="flex flex-wrap gap-2">
+                {skills.map((skill) => (
+                  <span class="px-3 py-1 text-xs font-medium bg-accent-50 text-accent-800 rounded-full">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </section>
+
+            <!-- Languages -->
+            <section>
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+                Languages
+              </h2>
+              <ul class="space-y-1 text-sm text-gray-700">
+                {languages.map(({ name, level }) => (
+                  <li>
+                    <span class="font-medium">{name}</span>
+                    <span class="text-gray-300"> — </span>
+                    <span class="text-gray-500">{level}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </>
+    ) : (
+      <div class="text-center py-24 animate-fade-in">
+        <p class="text-2xl font-bold text-gray-300">Nothing here ... yet</p>
+        <p class="text-sm text-gray-400 mt-2">Check back soon to learn more about me.</p>
       </div>
-
-      <!-- Sidebar -->
-      <aside class="space-y-8 bg-white rounded-xl p-6 shadow-md border border-gray-200 h-fit">
-        <!-- Certifications -->
-        <section>
-          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-            Certifications
-          </h2>
-          <ul class="space-y-1.5 text-sm text-gray-700">
-            {certifications.map((cert) => (
-              <li>{cert}</li>
-            ))}
-          </ul>
-        </section>
-
-        <!-- Skills -->
-        <section>
-          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-            Skills
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span class="px-3 py-1 text-xs font-medium bg-accent-50 text-accent-800 rounded-full">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </section>
-
-        <!-- Languages -->
-        <section>
-          <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-            Languages
-          </h2>
-          <ul class="space-y-1 text-sm text-gray-700">
-            {languages.map(({ name, level }) => (
-              <li>
-                <span class="font-medium">{name}</span>
-                <span class="text-gray-300"> — </span>
-                <span class="text-gray-500">{level}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </aside>
-    </div>
+    )}
   </div>
 </Layout>
