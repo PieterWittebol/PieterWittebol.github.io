@@ -25,26 +25,24 @@ const photosWithFull = await Promise.all(
 
 <Layout title="Photography" description="A portfolio of moments captured through the lens.">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-10 animate-fade-in">
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-10" data-reveal="left">
       Photography
     </h1>
 
     {photosWithFull.length > 0 ? (
-      <div id="gallery" class="pswp-gallery grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div id="gallery" class="pswp-gallery grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
         {photosWithFull.map((photo, index) => (
-          <div class="animate-scale-in" style={`animation-delay: ${index * 80}ms`}>
-            <PhotoCard
-              image={photo.data.image}
-              title={photo.data.title}
-              location={photo.data.location}
-              camera={photo.data.camera}
-              tags={photo.data.tags}
-              fullSrc={photo.full.src}
-              fullWidth={photo.full.width}
-              fullHeight={photo.full.height}
-              index={index}
-            />
-          </div>
+          <PhotoCard
+            image={photo.data.image}
+            title={photo.data.title}
+            location={photo.data.location}
+            camera={photo.data.camera}
+            tags={photo.data.tags}
+            fullSrc={photo.full.src}
+            fullWidth={photo.full.width}
+            fullHeight={photo.full.height}
+            index={index}
+          />
         ))}
       </div>
     ) : (
