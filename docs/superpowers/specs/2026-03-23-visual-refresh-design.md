@@ -19,7 +19,12 @@ Increase the general appeal of wittebol.be for all visitors by improving typogra
 
 **Rationale:** Playwrite NZ is a cursive script — beautiful but low readability at body sizes. Moving it to display-only preserves personality while making the site accessible to users with dyslexia or visual impairments. Lora is a warm, editorial serif that harmonises with the earthy palette.
 
-**Implementation:** Add `@fontsource-variable/lora` package. Add a `.font-display` utility class in global CSS that applies Playwrite NZ. Remove Playwrite NZ from the `--font-sans` theme variable; replace with Lora as primary, Inter as fallback.
+**Implementation:**
+1. Run `pnpm add @fontsource-variable/lora` to install the package.
+2. Add `.font-display { font-family: "Playwrite NZ Variable", cursive; }` utility class in global CSS.
+3. **Critical ordering:** Update `Header.astro` logo span and `index.astro` hero tagline with `font-display` class **before or in the same commit** as changing `--font-sans` — otherwise the logo briefly renders in Lora.
+4. Audit all `font-sans` usages across the codebase (`grep -r "font-sans" src/`) to confirm none are intentionally relying on Playwrite NZ. Any that are must receive `font-display` instead.
+5. Change `--font-sans` to `"Lora Variable", "Georgia", serif`.
 
 ## Color Palette
 
@@ -66,6 +71,8 @@ Added as `--color-amber-*` in the `@theme` block:
 ### Scroll-triggered (new)
 
 **Mechanism:** A small vanilla JS module (`src/scripts/reveal.ts`, ~30 lines) using `IntersectionObserver`. Applied once via a `<script>` tag in `Layout.astro`. Re-initialised on `astro:page-load` to support ClientRouter transitions.
+
+**ClientRouter re-init strategy:** On `astro:before-swap`, strip `is-visible` from all `.reveal` elements so that elements on the incoming page start in their hidden state. On `astro:page-load`, re-run the observer setup (disconnect previous observer, query all current `[data-reveal]` elements, begin observing). This ensures elements animate in on every page visit, not just the first.
 
 **API:**
 - `data-reveal="fade"` — opacity 0 → 1
