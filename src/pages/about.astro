@@ -46,10 +46,10 @@ if (entry) {
           <div class="space-y-10 bg-white rounded-xl p-6 sm:p-8 shadow-md border border-gray-200">
             <!-- Experience -->
             <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
+              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2" data-reveal="left">
                 Experience
               </h2>
-              <div class="space-y-6">
+              <div class="space-y-6" data-reveal-group>
                 {experience.map(({ role, company, period, description, assignments }) => (
                   <div>
                     <h3 class="font-bold text-gray-900">{role}</h3>
@@ -73,7 +73,7 @@ if (entry) {
 
             <!-- Education -->
             <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2 animate-slide-in-left">
+              <h2 class="text-xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2" data-reveal="left">
                 Education
               </h2>
               <div class="space-y-4">
@@ -91,7 +91,7 @@ if (entry) {
           <aside class="space-y-8 bg-white rounded-xl p-6 shadow-md border border-gray-200 h-fit">
             <!-- Certifications -->
             <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2" data-reveal="left">
                 Certifications
               </h2>
               <ul class="space-y-1.5 text-sm text-gray-700">
@@ -103,12 +103,12 @@ if (entry) {
 
             <!-- Skills -->
             <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2" data-reveal="left">
                 Skills
               </h2>
               <div class="flex flex-wrap gap-2">
                 {skills.map((skill) => (
-                  <span class="px-3 py-1 text-xs font-medium bg-accent-50 text-accent-800 rounded-full">
+                  <span class="px-3 py-1 text-xs font-medium bg-amber-50 text-amber-800 rounded-full">
                     {skill}
                   </span>
                 ))}
@@ -117,7 +117,7 @@ if (entry) {
 
             <!-- Languages -->
             <section>
-              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+              <h2 class="text-xl font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2" data-reveal="left">
                 Languages
               </h2>
               <ul class="space-y-1 text-sm text-gray-700">
