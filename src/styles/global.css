@@ -1,10 +1,11 @@
 @import "@fontsource-variable/playwrite-nz";
+@import "@fontsource-variable/lora";
 
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Playwrite NZ", "Segoe UI", "Roboto", sans-serif;
+  --font-sans: "Lora Variable", "Georgia", serif;
 
   /* Monochrome base (zinc-like) */
   --color-gray-50: #fafafa;
@@ -31,6 +32,18 @@
   --color-accent-800: #921919;
   --color-accent-900: #7a1717;
   --color-accent-950: #541213;
+
+  /* Amber/sand complementary scale */
+  --color-amber-50:  #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
 }
 
 @layer base {
@@ -138,6 +151,50 @@
   .delay-600 { animation-delay: 600ms; }
   .delay-700 { animation-delay: 700ms; }
   .delay-800 { animation-delay: 800ms; }
+
+  .font-display {
+    font-family: "Playwrite NZ Variable", cursive;
+  }
+
+  /* Sliding underline for desktop nav links */
+  .nav-link {
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-amber-400);
+    transition: width 0.2s ease;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.is-active::after {
+    width: 100%;
+  }
+
+  /* Scroll-triggered reveal */
+  .reveal {
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .reveal[data-reveal="up"] {
+    transform: translateY(20px);
+  }
+
+  .reveal[data-reveal="left"] {
+    transform: translateX(-20px);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
