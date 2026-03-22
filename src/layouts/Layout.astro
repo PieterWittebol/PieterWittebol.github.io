@@ -32,5 +32,8 @@ const { title, description, ogImage, ogType } = Astro.props;
       <slot />
     </main>
     <Footer transition:animate="none" />
+    <script>
+      import '../scripts/reveal.ts';
+    </script>
   </body>
 </html>
