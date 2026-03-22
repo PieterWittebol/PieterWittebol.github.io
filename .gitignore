@@ -35,3 +35,10 @@ pnpm-debug.log*
 # temporary files
 *.tmp
 *.log
+
+# environment variable files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
