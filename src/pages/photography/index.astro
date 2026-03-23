@@ -51,6 +51,10 @@ const photosWithFull = await Promise.all(
         <p class="text-sm text-gray-400 mt-2">Check back soon for new photos.</p>
       </div>
     )}
+
+    <p class="mt-12 text-sm text-gray-400">
+      &copy; {new Date().getFullYear()} Pieter Wittebol. All rights reserved. Images may not be reproduced or distributed without prior written consent.
+    </p>
   </div>
 </Layout>
 
@@ -84,7 +88,7 @@ const photosWithFull = await Promise.all(
         appendTo: 'root',
         html: '',
         onInit: (el) => {
-          el.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;text-align:center;font-size:14px;line-height:1.5;pointer-events:none;';
+          el.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:12px 24px;background:rgba(0,0,0,0.82);color:#fff;text-align:center;font-size:14px;line-height:1.5;pointer-events:none;';
           lightbox.pswp!.on('change', () => {
             const slide = lightbox.pswp!.currSlide;
             const caption = slide?.data?.element?.getAttribute('data-caption') ?? '';

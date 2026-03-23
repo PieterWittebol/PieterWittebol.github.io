@@ -32,23 +32,23 @@ const caption = [
   data-pswp-height={fullHeight}
   data-cropped="true"
   data-caption={caption}
-  class="group relative block w-full overflow-hidden rounded-lg bg-gray-100 shadow-md hover:shadow-xl transition-shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+  class="group block w-full overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
 >
-  <Image
-    src={image}
-    alt={title}
-    width={600}
-    densities={[1.5, 2]}
-    format="webp"
-    quality={80}
-    class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-    loading={index < 6 ? 'eager' : 'lazy'}
-    decoding="async"
-  />
-  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-    <div class="absolute bottom-0 left-0 right-0 p-3">
-      <p class="text-white text-sm font-medium">{title}</p>
-      {location && <p class="text-white/70 text-xs mt-0.5">{location}</p>}
-    </div>
+  <div class="overflow-hidden">
+    <Image
+      src={image}
+      alt={title}
+      width={600}
+      densities={[1.5, 2]}
+      format="webp"
+      quality={80}
+      class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+      loading={index < 6 ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  </div>
+  <div class="bg-gray-900 px-3 py-2.5">
+    <p class="text-white text-sm font-medium">{title}</p>
+    {location && <p class="text-white/60 text-xs mt-0.5">{location}</p>}
   </div>
 </a>
