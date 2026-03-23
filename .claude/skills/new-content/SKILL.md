@@ -10,7 +10,7 @@ Ask the user:
 4. Tags (comma-separated)
 
 For **photography**, also ask:
-- Image filename (e.g. `_3254135.jpg`) — the file should be placed next to the .md
+- Image file path — used both to run analysis and as the co-located asset
 - Location (optional)
 - Camera (optional)
 
@@ -19,7 +19,47 @@ For **woodworking**, also ask:
 
 ---
 
-## Photography
+## Photography — Auto-Analysis
+
+When the user provides an image file path, **run the analysis script first** before asking for title, tags, location, or camera:
+
+```bash
+python3 .claude/skills/new-content/analyze_photo.py <image_path>
+```
+
+The script outputs JSON. Use its values as pre-filled defaults. Present them to the user for confirmation:
+
+```
+Detected from photo:
+  Date:     2023-03-25         (from EXIF)
+  Camera:   Olympus OM-D E-M5 Mark II  (from EXIF)
+  Location: South Africa       (from GPS)
+  Title:    African Penguin    (Claude suggestion)
+  Tags:     wildlife, south africa  (Claude suggestion)
+
+Press Enter to accept each, or type a replacement.
+```
+
+If the script fails or a field is missing, fall back to asking the user.
+
+### Dependencies
+
+The script requires:
+```bash
+pip install Pillow anthropic   # required
+pip install geopy              # optional — enables GPS → location name
+```
+
+Dependencies are installed in the conda environment `website`. Run the script via:
+```bash
+conda run -n website python3 .claude/skills/new-content/analyze_photo.py <image_path>
+```
+
+The script needs `ANTHROPIC_API_KEY` for vision inference. **Claude Code authenticates via OAuth (macOS Keychain), not a plain API key**, so the script's Claude step will fail in this environment. When it does, **skip the script's vision step and use the Read tool directly** — Claude Code is multimodal and can analyze the image itself. EXIF fields (date, camera) will still come from the script; title, tags, and location come from Claude's own analysis.
+
+---
+
+## Photography — Output
 
 Create `src/content/photography/<slug>.md` where `<slug>` is the title kebab-cased.
 
@@ -35,7 +75,7 @@ draft: false
 ---
 ```
 
-Note: `image` must be a relative path starting with `./` pointing to the image co-located in the same directory. Remind the user that the image file must be placed in the same directory as the `.md` file before running `pnpm build`, otherwise the build will fail with a missing asset error.
+`image` must be a relative path starting with `./` — just the filename, not the full path. Remind the user that the image file must be placed in `src/content/photography/` before running `pnpm build`, otherwise the build will fail with a missing asset error.
 
 ---
 
