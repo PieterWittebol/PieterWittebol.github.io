@@ -1,5 +1,5 @@
 ---
-title: "Wild Horses of Garub"
+title: "Oryx of Garub"
 date: 2025-03-13
 image: ./P3131726.jpg
 tags: ["landscape", "wildlife", "namibia", "desert"]
