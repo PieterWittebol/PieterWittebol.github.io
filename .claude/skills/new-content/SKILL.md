@@ -21,20 +21,24 @@ For **woodworking**, also ask:
 
 ## Photography — Auto-Analysis
 
-When the user provides an image file path, **run the analysis script first** before asking for title, tags, location, or camera:
+When the user provides an image file path:
 
-```bash
-python3 .claude/skills/new-content/analyze_photo.py <image_path>
-```
+1. **Run the analysis script** to extract EXIF metadata:
+   ```bash
+   conda run -n website python3 .claude/skills/new-content/analyze_photo.py <image_path>
+   ```
+   This outputs JSON with `date`, `camera`, and `location` (if GPS is present).
 
-The script outputs JSON. Use its values as pre-filled defaults. Present them to the user for confirmation:
+2. **Read the image directly** using the Read tool to infer title, tags, and description — Claude Code is multimodal and analyzes the image itself.
+
+Combine both sources as pre-filled defaults and present them to the user for confirmation:
 
 ```
 Detected from photo:
-  Date:     2023-03-25         (from EXIF)
+  Date:     2023-03-25              (from EXIF)
   Camera:   Olympus OM-D E-M5 Mark II  (from EXIF)
-  Location: South Africa       (from GPS)
-  Title:    African Penguin    (Claude suggestion)
+  Location: South Africa            (from GPS)
+  Title:    African Penguin         (Claude suggestion)
   Tags:     wildlife, south africa  (Claude suggestion)
 
 Press Enter to accept each, or type a replacement.
@@ -46,16 +50,11 @@ If the script fails or a field is missing, fall back to asking the user.
 
 The script requires:
 ```bash
-pip install Pillow anthropic   # required
-pip install geopy              # optional — enables GPS → location name
+pip install Pillow
+pip install geopy  # optional — enables GPS → location name
 ```
 
-Dependencies are installed in the conda environment `website`. Run the script via:
-```bash
-conda run -n website python3 .claude/skills/new-content/analyze_photo.py <image_path>
-```
-
-The script needs `ANTHROPIC_API_KEY` for vision inference. **Claude Code authenticates via OAuth (macOS Keychain), not a plain API key**, so the script's Claude step will fail in this environment. When it does, **skip the script's vision step and use the Read tool directly** — Claude Code is multimodal and can analyze the image itself. EXIF fields (date, camera) will still come from the script; title, tags, and location come from Claude's own analysis.
+Dependencies are installed in the conda environment `website`.
 
 ---
 
