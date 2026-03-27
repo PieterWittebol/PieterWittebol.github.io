@@ -66,6 +66,8 @@
       renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       container.appendChild(renderer.domElement);
 
       // Lighting — warm tones to match site palette
@@ -74,6 +76,10 @@
 
       const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
       keyLight.position.set(5, 10, 7.5);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.width = 1024;
+      keyLight.shadow.mapSize.height = 1024;
+      keyLight.shadow.radius = 4;
       scene.add(keyLight);
 
       const fillLight = new THREE.DirectionalLight(0xfde68a, 0.5); // amber-200
@@ -162,6 +168,13 @@
       const maxDim = Math.max(size.x, size.y, size.z);
 
       object.position.sub(center);
+      // Enable shadow casting on all meshes
+      object.traverse((child: import('three').Object3D) => {
+        if ((child as import('three').Mesh).isMesh) {
+          (child as import('three').Mesh).castShadow = true;
+          (child as import('three').Mesh).receiveShadow = true;
+        }
+      });
       scene.add(object);
 
       const fov = camera.fov * (Math.PI / 180);
@@ -176,6 +189,26 @@
       controls.minDistance = dist * 0.3;
       controls.maxDistance = dist * 6;
       controls.update();
+
+      // Configure key light shadow camera to cover the model
+      const shadowExtent = maxDim * 2;
+      keyLight.shadow.camera.left = -shadowExtent;
+      keyLight.shadow.camera.right = shadowExtent;
+      keyLight.shadow.camera.top = shadowExtent;
+      keyLight.shadow.camera.bottom = -shadowExtent;
+      keyLight.shadow.camera.near = dist * 0.01;
+      keyLight.shadow.camera.far = dist * 10;
+      keyLight.shadow.camera.updateProjectionMatrix();
+
+      // Invisible shadow-receiving plane just below the model
+      const shadowPlane = new THREE.Mesh(
+        new THREE.PlaneGeometry(maxDim * 6, maxDim * 6),
+        new THREE.ShadowMaterial({ opacity: 0.25 })
+      );
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.y = -size.y / 2;
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
 
       loading = false;
 
