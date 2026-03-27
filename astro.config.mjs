@@ -17,5 +17,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     cacheDir: '/tmp/vite-wittebol',
+    assetsInclude: ['**/*.obj', '**/*.mtl'],
   },
 });

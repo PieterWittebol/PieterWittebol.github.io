@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import ModelViewer from '../../components/ModelViewer.svelte';
 
 export async function getStaticPaths() {
   const posts = await getCollection('woodworking');
@@ -13,6 +14,19 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// Resolve co-located .obj and .mtl files to their Vite asset URLs
+const objFiles = import.meta.glob<string>('/src/content/woodworking/**/*.obj', { query: '?url', import: 'default', eager: true });
+const mtlFiles = import.meta.glob<string>('/src/content/woodworking/**/*.mtl', { query: '?url', import: 'default', eager: true });
+
+let modelSrc: string | undefined;
+let modelMtl: string | undefined;
+
+if (post.data.model) {
+  const filename = post.data.model.replace(/^\.\//, '');
+  modelSrc = objFiles[`/src/content/woodworking/${post.id}/${filename}`];
+  modelMtl = mtlFiles[`/src/content/woodworking/${post.id}/${filename.replace(/\.obj$/i, '.mtl')}`];
+}
 
 const formattedDate = post.data.date.toLocaleDateString('en-GB', {
   year: 'numeric',
@@ -65,5 +79,13 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
     <div class="prose max-w-none animate-slide-up delay-200">
       <Content />
     </div>
+
+    <!-- 3D Model -->
+    {modelSrc && (
+      <section class="mt-10 animate-slide-up delay-300">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">3D Model</h2>
+        <ModelViewer client:visible src={modelSrc} mtl={modelMtl} />
+      </section>
+    )}
   </article>
 </Layout>
