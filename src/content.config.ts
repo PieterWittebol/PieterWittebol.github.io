@@ -12,6 +12,7 @@ const photography = defineCollection({
       location: z.string().optional(),
       camera: z.string().optional(),
       draft: z.boolean().default(false),
+      background: z.boolean().default(false),
     }),
 });
 

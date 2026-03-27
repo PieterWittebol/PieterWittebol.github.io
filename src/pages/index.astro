@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 
-const photos = (await getCollection('photography')).filter((e) => !e.data.draft);
+const photos = (await getCollection('photography')).filter(
+  (e) => !e.data.draft && e.data.background,
+);
 
 const bgImages = await Promise.all(
   photos.map(async (photo) => {
