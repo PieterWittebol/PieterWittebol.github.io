@@ -19,6 +19,22 @@
 
   onMount(async () => {
     try {
+      // During Astro View Transitions the component can mount while the
+      // container still has zero dimensions. Wait for a real layout before
+      // initialising Three.js, otherwise the renderer is created at 0×0 and
+      // nothing ever appears without a hard refresh.
+      if (container.clientWidth === 0 || container.clientHeight === 0) {
+        await new Promise<void>((resolve) => {
+          const ro = new ResizeObserver((entries) => {
+            if (entries[0].contentRect.width > 0 && entries[0].contentRect.height > 0) {
+              ro.disconnect();
+              resolve();
+            }
+          });
+          ro.observe(container);
+        });
+      }
+
       const THREE = await import('three');
       const { OBJLoader } = await import('three/addons/loaders/OBJLoader.js');
       const { MTLLoader } = await import('three/addons/loaders/MTLLoader.js');
