@@ -25,6 +25,7 @@ const woodworking = defineCollection({
       cover: image(),
       tags: z.array(z.string()).default([]),
       model: z.string().optional(),
+      modelUpAxis: z.enum(['Y', 'Z']).default('Y'),
       draft: z.boolean().default(false),
     }),
 });

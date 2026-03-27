@@ -5,9 +5,8 @@ date: 2025-08-15
 cover: ./images/cover.jpg
 tags: ["furniture", "dining table"]
 model: ./model.obj
+modelUpAxis: Z
 draft: false
 ---
 
-This is a pdining table I made over the course of a year.
-
-![Detail shot](./images/cover.jpg)
+This is a dining table I made over the course of a year.
