@@ -6,4 +6,5 @@ tags: [sweden, landscape, lake, nature]
 location: "Sweden"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: true
 ---

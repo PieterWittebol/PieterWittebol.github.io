@@ -6,4 +6,5 @@ tags: ["wildlife", "south africa"]
 location: "South Africa"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: true
 ---

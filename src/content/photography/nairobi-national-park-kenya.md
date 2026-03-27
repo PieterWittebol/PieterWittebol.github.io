@@ -6,4 +6,5 @@ tags: [wildlife, kenya]
 location: "Nairobi National Park, Kenya"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: true
 ---

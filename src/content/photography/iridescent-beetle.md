@@ -6,4 +6,5 @@ tags: [macro, wildlife, insect, nature]
 location: "Kruger Park, South Africa"
 camera: "OM Digital Solutions OM-1"
 draft: false
+background: true
 ---

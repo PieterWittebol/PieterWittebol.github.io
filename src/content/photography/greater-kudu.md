@@ -6,4 +6,5 @@ tags: [wildlife, kruger, south-africa, antelope]
 location: "Kruger Park, South Africa"
 camera: "OM Digital Solutions OM-1"
 draft: false
+background: true
 ---

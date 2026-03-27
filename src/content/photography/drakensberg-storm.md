@@ -6,4 +6,5 @@ tags: [south-africa, landscape, mountains, nature]
 location: "Drakensberg, South Africa"
 camera: "OM Digital Solutions OM-1"
 draft: false
+background: true
 ---

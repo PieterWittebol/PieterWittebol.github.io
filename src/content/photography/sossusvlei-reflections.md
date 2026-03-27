@@ -6,4 +6,5 @@ tags: ["landscape", "namibia", "desert"]
 location: "Sossusvlei, Namibia"
 camera: "OM System OM-1"
 draft: false
+background: true
 ---

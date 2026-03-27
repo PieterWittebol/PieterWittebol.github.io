@@ -6,4 +6,5 @@ tags: ["birds", "wildlife", "namibia"]
 location: "Namibia"
 camera: "OM System OM-1"
 draft: false
+background: false
 ---

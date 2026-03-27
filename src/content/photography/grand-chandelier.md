@@ -6,4 +6,5 @@ tags: [architecture, interior, mosque, oman, chandelier]
 location: "Sultan Qaboos Grand Mosque, Muscat, Oman"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: true
 ---

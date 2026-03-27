@@ -6,4 +6,5 @@ tags: ["sri lanka", "jeep", "travel"]
 location: "Kalpitiya, Sri Lanka"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: false
 ---

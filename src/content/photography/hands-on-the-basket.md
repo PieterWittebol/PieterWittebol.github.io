@@ -6,4 +6,5 @@ tags: [travel, balloon, people]
 location: "Maasai Mara, Kenya"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
+background: true
 ---

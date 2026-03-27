@@ -6,4 +6,5 @@ tags: ["landscape", "wildlife", "namibia", "desert"]
 location: "Garub, Namibia"
 camera: "OM System OM-1"
 draft: false
+background: true
 ---
