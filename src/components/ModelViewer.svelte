@@ -10,12 +10,15 @@
 
   let animationId: number;
   let renderer: import('three').WebGLRenderer | null = null;
+  let destroyed = false;
 
   // Actions wired up after Three.js initialises
   let resetView = () => {};
   let zoomIn = () => {};
   let zoomOut = () => {};
   let toggleSpin = () => { spinning = !spinning; };
+
+  onDestroy(() => { destroyed = true; });
 
   onMount(async () => {
     try {
@@ -26,6 +29,8 @@
       if (container.clientWidth === 0 || container.clientHeight === 0) {
         await new Promise<void>((resolve) => {
           const ro = new ResizeObserver((entries) => {
+            // Component may have been destroyed while we were waiting.
+            if (destroyed) { ro.disconnect(); resolve(); return; }
             if (entries[0].contentRect.width > 0 && entries[0].contentRect.height > 0) {
               ro.disconnect();
               resolve();
@@ -35,10 +40,16 @@
         });
       }
 
+      // Bail out if the component was unmounted (e.g. user navigated away
+      // during a View Transition) before dimensions became available.
+      if (destroyed || !container) return;
+
       const THREE = await import('three');
       const { OBJLoader } = await import('three/addons/loaders/OBJLoader.js');
       const { MTLLoader } = await import('three/addons/loaders/MTLLoader.js');
       const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+
+      if (destroyed || !container) return;
 
       const width = container.clientWidth;
       const height = container.clientHeight;
