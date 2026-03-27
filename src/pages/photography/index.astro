@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
-import PhotoCard from '../../components/PhotoCard.astro';
+import PhotoEntry from '../../components/PhotoEntry.astro';
 
 const photos = (await getCollection('photography'))
   .filter((entry) => !entry.data.draft)
@@ -21,18 +21,33 @@ const photosWithFull = await Promise.all(
     };
   }),
 );
+
+const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].sort();
 ---
 
 <Layout title="Photography" description="A portfolio of moments captured through the lens.">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-10" data-reveal="left">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <h1 class="text-xl font-medium text-gray-400 mb-10" data-reveal="left">
       Photography
     </h1>
 
+    {allTags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-14">
+        {allTags.map((tag) => (
+          <button
+            data-tag={tag}
+            class="tag-filter px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    )}
+
     {photosWithFull.length > 0 ? (
-      <div id="gallery" class="pswp-gallery grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      <div id="gallery" class="pswp-gallery">
         {photosWithFull.map((photo, index) => (
-          <PhotoCard
+          <PhotoEntry
             image={photo.data.image}
             title={photo.data.title}
             location={photo.data.location}
@@ -52,7 +67,7 @@ const photosWithFull = await Promise.all(
       </div>
     )}
 
-    <p class="mt-12 text-sm text-gray-400">
+    <p class="mt-4 text-sm text-gray-400">
       &copy; {new Date().getFullYear()} Pieter Wittebol. All rights reserved. Images may not be reproduced or distributed without prior written consent.
     </p>
   </div>
@@ -105,5 +120,79 @@ const photosWithFull = await Promise.all(
     currentLightbox = lightbox;
   }
 
+  function initFilters() {
+    const activeTags = new Set<string>();
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
+    const wrappers = document.querySelectorAll<HTMLElement>('[data-entry-wrapper]');
+
+    function isMatch(wrapper: HTMLElement): boolean {
+      if (activeTags.size === 0) return true;
+      const tags = (wrapper.dataset.tags ?? '').split(',').filter(Boolean);
+      return tags.some((t) => activeTags.has(t));
+    }
+
+    function hide(wrapper: HTMLElement) {
+      const h = wrapper.offsetHeight;
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.height = h + 'px';
+      wrapper.getBoundingClientRect();
+      wrapper.style.transition = 'height 400ms ease, opacity 400ms ease';
+      wrapper.style.height = '0';
+      wrapper.style.opacity = '0';
+      function onEnd(e: TransitionEvent) {
+        if (e.propertyName !== 'height') return;
+        wrapper.removeEventListener('transitionend', onEnd);
+        wrapper.style.display = 'none';
+        wrapper.style.transition = '';
+      }
+      wrapper.addEventListener('transitionend', onEnd);
+    }
+
+    function show(wrapper: HTMLElement) {
+      wrapper.style.display = '';
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.height = '0';
+      wrapper.style.opacity = '0';
+      wrapper.getBoundingClientRect();
+      const naturalH = wrapper.scrollHeight;
+      wrapper.style.transition = 'height 400ms ease, opacity 400ms ease';
+      wrapper.style.height = naturalH + 'px';
+      wrapper.style.opacity = '1';
+      function onEnd(e: TransitionEvent) {
+        if (e.propertyName !== 'height') return;
+        wrapper.removeEventListener('transitionend', onEnd);
+        wrapper.style.height = 'auto';
+        wrapper.style.overflow = '';
+        wrapper.style.transition = '';
+      }
+      wrapper.addEventListener('transitionend', onEnd);
+    }
+
+    function applyFilters() {
+      wrappers.forEach((wrapper) => {
+        if (isMatch(wrapper)) {
+          if (wrapper.style.display === 'none') show(wrapper);
+        } else {
+          if (wrapper.style.display !== 'none') hide(wrapper);
+        }
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag!;
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+          btn.classList.remove('!bg-gray-900', '!text-white');
+        } else {
+          activeTags.add(tag);
+          btn.classList.add('!bg-gray-900', '!text-white');
+        }
+        applyFilters();
+      });
+    });
+  }
+
   document.addEventListener('astro:page-load', initGallery);
+  document.addEventListener('astro:page-load', initFilters);
 </script>
