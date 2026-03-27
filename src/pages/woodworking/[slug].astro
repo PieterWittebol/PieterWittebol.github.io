@@ -84,7 +84,7 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
     {modelSrc && (
       <section class="mt-10 animate-slide-up delay-300">
         <h2 class="text-xl font-bold text-gray-900 mb-4">3D Model</h2>
-        <ModelViewer client:visible src={modelSrc} mtl={modelMtl} upAxis={post.data.modelUpAxis} />
+        <ModelViewer client:idle src={modelSrc} mtl={modelMtl} upAxis={post.data.modelUpAxis} />
       </section>
     )}
   </article>
