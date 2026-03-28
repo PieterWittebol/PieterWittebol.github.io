@@ -102,7 +102,10 @@
         const iso: string = feat?.properties?.ISO_A2 ?? '';
         const name = ISO_COUNTRY[iso];
         if (name && countries[name]) {
-          window.location.href = `/photography?country=${encodeURIComponent(name)}`;
+          container.dispatchEvent(new CustomEvent('country-select', {
+            detail: { country: name },
+            bubbles: true,
+          }));
         }
       });
 
