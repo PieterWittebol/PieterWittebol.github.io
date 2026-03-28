@@ -10,6 +10,7 @@ const photography = defineCollection({
       image: image(),
       tags: z.array(z.string()).default([]),
       location: z.string().optional(),
+      country: z.string().optional(),
       camera: z.string().optional(),
       draft: z.boolean().default(false),
       background: z.boolean().default(false),
