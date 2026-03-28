@@ -351,7 +351,7 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
     if (!country || !pill) return;
 
     // Set shared state so the tag filter's isMatch() is aware of country restriction
-    activeCountry = country;
+    activeCountry = country.toLowerCase();
 
     // Show pill (XSS-safe)
     pill.classList.remove('hidden');
@@ -382,12 +382,14 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
     // Apply initial country filter (direct, no animation on page load)
     wrappers.forEach((wrapper) => {
       const wrapperCountry = wrapper.dataset.country ?? '';
-      if (wrapperCountry.toLowerCase() !== country.toLowerCase()) {
+      if (wrapperCountry.toLowerCase() !== activeCountry) {
         wrapper.style.display = 'none';
       }
     });
   }
 
+  // initFilters must run before initCountryFilter so reapplyTagFilter is assigned
+  // before the country filter's clear handler can invoke it.
   document.addEventListener('astro:page-load', initGallery);
   document.addEventListener('astro:page-load', initFilters);
   document.addEventListener('astro:page-load', initCountryFilter);
