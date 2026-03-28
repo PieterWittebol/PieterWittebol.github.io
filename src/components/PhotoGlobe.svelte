@@ -134,8 +134,7 @@
 
   onDestroy(() => {
     clearTimeout(rotationTimer);
-    const canvas = container?.querySelector('canvas');
-    canvas?.remove();
+    try { globe?._destructor(); } catch (_) {}
   });
 </script>
 
