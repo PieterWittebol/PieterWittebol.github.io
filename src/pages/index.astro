@@ -17,9 +17,11 @@ const bgImages = await Promise.all(
 
 <Layout title="Home" description="Personal website of Pieter Wittebol — systems engineer, photographer, and woodworker.">
   <!-- Hero -->
-  <section id="hero" class="relative overflow-hidden bg-gray-900">
-    <div class="absolute inset-0 bg-gradient-to-b from-black/55 to-black/65"></div>
-    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-36 text-center">
+  <section id="hero" class="relative overflow-hidden bg-gray-900 min-h-[calc(100dvh-4rem)] flex flex-col">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/25 to-black/55"></div>
+
+    <!-- Title / tagline -->
+    <div class="relative flex-1 flex flex-col items-center justify-center text-center px-4 sm:px-6 lg:px-8">
       <p class="font-display text-sm font-medium tracking-widest uppercase text-white/60 mb-4 animate-fade-in">
         Welcome to
       </p>
