@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import PhotoEntry from '../../components/PhotoEntry.astro';
+import PhotoGlobe from '../../components/PhotoGlobe.svelte';
 
 const photos = (await getCollection('photography'))
   .filter((entry) => !entry.data.draft)
@@ -23,6 +24,13 @@ const photosWithFull = await Promise.all(
 );
 
 const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].sort();
+
+const countryCounts: Record<string, number> = {};
+for (const photo of photosWithFull) {
+  if (photo.data.country) {
+    countryCounts[photo.data.country] = (countryCounts[photo.data.country] ?? 0) + 1;
+  }
+}
 ---
 
 <Layout title="Photography" description="A portfolio of moments captured through the lens.">
@@ -31,14 +39,12 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
       <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">
         Photography
       </h1>
-      <a
-        href="/photography/map"
-        data-astro-prefetch
-        class="text-sm text-gray-400 hover:text-gray-600 transition-colors"
-      >
-        View map →
-      </a>
     </div>
+
+    <div class="relative w-full rounded-xl overflow-hidden h-[400px] sm:h-[560px] mb-4">
+      <PhotoGlobe countries={countryCounts} client:only="svelte" />
+    </div>
+    <p class="mb-10 text-sm text-gray-400 text-center">Click a country to filter photos</p>
 
     {allTags.length > 0 && (
       <div class="mb-14">
