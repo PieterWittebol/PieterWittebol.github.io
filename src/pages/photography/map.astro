@@ -31,12 +31,17 @@ const countryCount = Object.keys(countryCounts).length;
       {countryCount} {countryCount === 1 ? 'country' : 'countries'} so far
     </p>
 
-    <div class="relative w-full rounded-xl overflow-hidden" style="height: 560px;">
+    <div class="relative w-full rounded-xl overflow-hidden h-[400px] sm:h-[560px]">
       <PhotoGlobe countries={countryCounts} client:only="svelte" />
     </div>
 
     <p class="mt-4 text-sm text-gray-400 text-center">
       Click a highlighted country to browse its photos
+    </p>
+    <p class="mt-8 text-center">
+      <a href="/photography" data-astro-prefetch class="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+        ← All photos
+      </a>
     </p>
   </div>
 </Layout>
