@@ -324,29 +324,29 @@ for (const photo of photosWithFull) {
     function setCountry(country: string | null) {
       activeCountry = country ? country.toLowerCase() : null;
 
-      if (!pill) return;
-
-      if (activeCountry && country) {
-        pill.classList.remove('hidden');
-        pill.innerHTML = '';
-        const span = document.createElement('span');
-        span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
-        const label = document.createElement('span');
-        label.textContent = 'Showing: ';
-        const strong = document.createElement('strong');
-        strong.textContent = country;
-        const pillClearBtn = document.createElement('button');
-        pillClearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
-        pillClearBtn.setAttribute('aria-label', 'Clear country filter');
-        pillClearBtn.textContent = '×';
-        pillClearBtn.addEventListener('click', () => setCountry(null));
-        label.appendChild(strong);
-        span.appendChild(label);
-        span.appendChild(pillClearBtn);
-        pill.appendChild(span);
-      } else {
-        pill.classList.add('hidden');
-        pill.innerHTML = '';
+      if (pill) {
+        if (activeCountry && country) {
+          pill.classList.remove('hidden');
+          pill.innerHTML = '';
+          const span = document.createElement('span');
+          span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
+          const label = document.createElement('span');
+          label.textContent = 'Showing: ';
+          const strong = document.createElement('strong');
+          strong.textContent = country;
+          const pillClearBtn = document.createElement('button');
+          pillClearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
+          pillClearBtn.setAttribute('aria-label', 'Clear country filter');
+          pillClearBtn.textContent = '×';
+          pillClearBtn.addEventListener('click', () => setCountry(null));
+          label.appendChild(strong);
+          span.appendChild(label);
+          span.appendChild(pillClearBtn);
+          pill.appendChild(span);
+        } else {
+          pill.classList.add('hidden');
+          pill.innerHTML = '';
+        }
       }
 
       applyFilters();
