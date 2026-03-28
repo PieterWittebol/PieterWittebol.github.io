@@ -25,12 +25,6 @@
 
   let hoveredISO: string | null = null;
 
-  function isVisited(feat: any): boolean {
-    const iso: string = feat?.properties?.ISO_A2 ?? '';
-    const name = ISO_COUNTRY[iso];
-    return !!(name && countries[name]);
-  }
-
   function getCapColor(feat: any): string {
     const iso: string = feat?.properties?.ISO_A2 ?? '';
     const name = ISO_COUNTRY[iso];
@@ -39,7 +33,6 @@
   }
 
   function startRotation() {
-    globe?.controls().then?.((c: any) => { c.autoRotate = true; });
     try {
       const controls = globe?.controls();
       if (controls) {
@@ -119,10 +112,10 @@
     controls.autoRotateSpeed = 0.3;
 
     // Pause on user interaction, resume after 3s
-    container.addEventListener('pointerdown', () => {
-      stopRotation();
-    });
-    container.addEventListener('pointerup', scheduleRotationResume);
+    const onPointerDown = () => stopRotation();
+    const onPointerUp = scheduleRotationResume;
+    container.addEventListener('pointerdown', onPointerDown);
+    container.addEventListener('pointerup', onPointerUp);
 
     // Resize observer
     const ro = new ResizeObserver(() => {
@@ -134,11 +127,15 @@
 
     return () => {
       ro.disconnect();
+      container.removeEventListener('pointerdown', onPointerDown);
+      container.removeEventListener('pointerup', onPointerUp);
     };
   });
 
   onDestroy(() => {
     clearTimeout(rotationTimer);
+    const canvas = container?.querySelector('canvas');
+    canvas?.remove();
   });
 </script>
 
