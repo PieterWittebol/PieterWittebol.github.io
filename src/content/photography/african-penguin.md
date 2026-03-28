@@ -4,6 +4,7 @@ date: 2023-03-25
 image: ./_3254135.jpg
 tags: ["wildlife", "south-africa"]
 location: "South Africa"
+country: "South Africa"
 camera: "Olympus OM-D E-M5 Mark II"
 draft: false
 background: true

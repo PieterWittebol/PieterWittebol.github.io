@@ -4,6 +4,7 @@ date: 2025-03-03
 image: ./P3033310.jpg
 tags: [macro, wildlife, insect, nature, south-africa]
 location: "Kruger Park, South Africa"
+country: "South Africa"
 camera: "OM Digital Solutions OM-1"
 draft: false
 background: true
