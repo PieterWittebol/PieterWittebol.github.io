@@ -122,6 +122,7 @@ for (const photo of photosWithFull) {
   import 'photoswipe/style.css';
 
   let currentLightbox: InstanceType<typeof PhotoSwipeLightbox> | null = null;
+  let currentCountryHandler: ((country: string) => void) | null = null;
 
   function initGallery() {
     if (currentLightbox) {
@@ -377,12 +378,14 @@ for (const photo of photosWithFull) {
       updateCompatibleTags();
     });
 
-    document.addEventListener('country-select', (e: Event) => {
-      const country = (e as CustomEvent<{ country: string }>).detail.country;
-      setCountry(country);
-      document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
-    });
+    currentCountryHandler = (country: string) => setCountry(country);
   }
+
+  document.addEventListener('country-select', (e: Event) => {
+    const country = (e as CustomEvent<{ country: string }>).detail.country;
+    currentCountryHandler?.(country);
+    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+  });
 
   document.addEventListener('astro:page-load', initGallery);
   document.addEventListener('astro:page-load', initFilters);
