@@ -23,6 +23,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
+    "globe.gl": "^2.45.1",
     "photoswipe": "^5.4.4",
     "sharp": "^0.34.5",
     "svelte": "^5.50.1",
