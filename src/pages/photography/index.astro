@@ -27,22 +27,58 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
 
 <Layout title="Photography" description="A portfolio of moments captured through the lens.">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <h1 class="text-xl font-medium text-gray-400 mb-10" data-reveal="left">
-      Photography
-    </h1>
+    <div class="flex items-baseline justify-between mb-10" data-reveal="left">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">
+        Photography
+      </h1>
+      <a
+        href="/photography/map"
+        data-astro-prefetch
+        class="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        View map →
+      </a>
+    </div>
 
     {allTags.length > 0 && (
-      <div class="flex flex-wrap gap-2 mb-14">
-        {allTags.map((tag) => (
+      <div class="mb-14">
+        <div class="flex items-center gap-3">
           <button
-            data-tag={tag}
-            class="tag-filter px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+            id="filter-toggle"
+            class="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+            aria-expanded="false"
           >
-            {tag}
+            Filter
+            <span id="filter-count" class="hidden items-center justify-center bg-gray-900 text-white text-xs rounded-full w-5 h-5 leading-none">0</span>
+            <svg id="filter-chevron" class="w-3.5 h-3.5 transition-transform duration-300" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="2,4 6,8 10,4" />
+            </svg>
           </button>
-        ))}
+          <button
+            id="filter-clear"
+            class="hidden text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div id="filter-panel" style="height: 0; opacity: 0; overflow: hidden;">
+          <div class="pt-4 flex flex-wrap gap-2">
+            {allTags.map((tag) => (
+              <button
+                data-tag={tag}
+                data-panel-tag
+                class="tag-filter px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors cursor-pointer"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     )}
+
+    <div id="country-pill" class="hidden mb-6"></div>
 
     {photosWithFull.length > 0 ? (
       <div id="gallery" class="pswp-gallery">
@@ -51,6 +87,7 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
             image={photo.data.image}
             title={photo.data.title}
             location={photo.data.location}
+            country={photo.data.country}
             camera={photo.data.camera}
             tags={photo.data.tags}
             fullSrc={photo.full.src}
@@ -122,13 +159,81 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
 
   function initFilters() {
     const activeTags = new Set<string>();
-    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
+    const tagButtons = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
     const wrappers = document.querySelectorAll<HTMLElement>('[data-entry-wrapper]');
+    const toggleBtn = document.querySelector<HTMLButtonElement>('#filter-toggle');
+    const clearBtn = document.querySelector<HTMLButtonElement>('#filter-clear');
+    const panel = document.querySelector<HTMLElement>('#filter-panel');
+    const countBadge = document.querySelector<HTMLElement>('#filter-count');
+    const chevron = document.querySelector<SVGElement>('#filter-chevron');
+
+    if (!toggleBtn || !panel) return;
+
+    let panelOpen = false;
+
+    function openPanel() {
+      panel!.style.overflow = 'hidden';
+      panel!.style.height = '0';
+      panel!.style.opacity = '0';
+      panel!.getBoundingClientRect();
+      const naturalH = panel!.scrollHeight;
+      panel!.style.transition = 'height 300ms ease, opacity 300ms ease';
+      panel!.style.height = naturalH + 'px';
+      panel!.style.opacity = '1';
+      function onEnd(e: TransitionEvent) {
+        if (e.propertyName !== 'height') return;
+        panel!.removeEventListener('transitionend', onEnd);
+        panel!.style.height = 'auto';
+        panel!.style.overflow = '';
+        panel!.style.transition = '';
+      }
+      panel!.addEventListener('transitionend', onEnd);
+      chevron?.classList.add('rotate-180');
+      toggleBtn!.setAttribute('aria-expanded', 'true');
+      panelOpen = true;
+    }
+
+    function closePanel() {
+      const h = panel!.offsetHeight;
+      panel!.style.overflow = 'hidden';
+      panel!.style.height = h + 'px';
+      panel!.getBoundingClientRect();
+      panel!.style.transition = 'height 300ms ease, opacity 300ms ease';
+      panel!.style.height = '0';
+      panel!.style.opacity = '0';
+      function onEnd(e: TransitionEvent) {
+        if (e.propertyName !== 'height') return;
+        panel!.removeEventListener('transitionend', onEnd);
+        panel!.style.transition = '';
+      }
+      panel!.addEventListener('transitionend', onEnd);
+      chevron?.classList.remove('rotate-180');
+      toggleBtn!.setAttribute('aria-expanded', 'false');
+      panelOpen = false;
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      if (panelOpen) closePanel();
+      else openPanel();
+    });
+
+    function updateBadge() {
+      const count = activeTags.size;
+      if (countBadge) {
+        countBadge.textContent = String(count);
+        if (count > 0) countBadge.classList.replace('hidden', 'inline-flex');
+        else countBadge.classList.replace('inline-flex', 'hidden');
+      }
+      if (clearBtn) {
+        if (count > 0) clearBtn.classList.remove('hidden');
+        else clearBtn.classList.add('hidden');
+      }
+    }
 
     function isMatch(wrapper: HTMLElement): boolean {
       if (activeTags.size === 0) return true;
       const tags = (wrapper.dataset.tags ?? '').split(',').filter(Boolean);
-      return tags.some((t) => activeTags.has(t));
+      return [...activeTags].every((t) => tags.includes(t));
     }
 
     function hide(wrapper: HTMLElement) {
@@ -178,21 +283,105 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
       });
     }
 
-    buttons.forEach((btn) => {
+    function updateCompatibleTags() {
+      const compatible = new Set<string>();
+      wrappers.forEach((wrapper) => {
+        if (isMatch(wrapper)) {
+          (wrapper.dataset.tags ?? '').split(',').filter(Boolean).forEach((t) => compatible.add(t));
+        }
+      });
+      panel!.querySelectorAll<HTMLElement>('[data-panel-tag]').forEach((btn) => {
+        const tag = btn.dataset.tag!;
+        if (activeTags.has(tag) || compatible.has(tag)) {
+          btn.style.display = '';
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+    }
+
+    function setTagActive(tag: string, active: boolean) {
+      document.querySelectorAll<HTMLElement>(`[data-tag="${tag}"]`).forEach((el) => {
+        if (active) el.classList.add('!bg-gray-900', '!text-white');
+        else el.classList.remove('!bg-gray-900', '!text-white');
+      });
+    }
+
+    tagButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const tag = btn.dataset.tag!;
         if (activeTags.has(tag)) {
           activeTags.delete(tag);
-          btn.classList.remove('!bg-gray-900', '!text-white');
+          setTagActive(tag, false);
         } else {
           activeTags.add(tag);
-          btn.classList.add('!bg-gray-900', '!text-white');
+          setTagActive(tag, true);
+          if (!panelOpen) openPanel();
         }
+        updateBadge();
         applyFilters();
+        updateCompatibleTags();
       });
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      activeTags.forEach((tag) => setTagActive(tag, false));
+      activeTags.clear();
+      updateBadge();
+      applyFilters();
+      updateCompatibleTags();
+    });
+  }
+
+  function initCountryFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const country = params.get('country');
+    const pill = document.getElementById('country-pill');
+    const wrappers = document.querySelectorAll<HTMLElement>('[data-entry-wrapper]');
+
+    if (!country || !pill) return;
+
+    // Show pill (XSS-safe)
+    pill.classList.remove('hidden');
+    const span = document.createElement('span');
+    span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
+
+    const label = document.createElement('span');
+    label.textContent = 'Showing: ';
+
+    const strong = document.createElement('strong');
+    strong.textContent = country;
+
+    const clearBtn = document.createElement('button');
+    clearBtn.id = 'clear-country-filter';
+    clearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
+    clearBtn.setAttribute('aria-label', 'Clear country filter');
+    clearBtn.textContent = '×';
+
+    label.appendChild(strong);
+    span.appendChild(label);
+    span.appendChild(clearBtn);
+    pill.appendChild(span);
+
+    clearBtn.addEventListener('click', () => {
+      history.replaceState(null, '', window.location.pathname);
+      pill.classList.add('hidden');
+      pill.innerHTML = '';
+      wrappers.forEach((w) => {
+        w.style.display = '';
+      });
+    });
+
+    // Hide non-matching entries
+    wrappers.forEach((wrapper) => {
+      const wrapperCountry = wrapper.dataset.country ?? '';
+      if (wrapperCountry.toLowerCase() !== country.toLowerCase()) {
+        wrapper.style.display = 'none';
+      }
     });
   }
 
   document.addEventListener('astro:page-load', initGallery);
   document.addEventListener('astro:page-load', initFilters);
+  document.addEventListener('astro:page-load', initCountryFilter);
 </script>
