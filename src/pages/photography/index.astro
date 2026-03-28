@@ -117,6 +117,9 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
 
   let currentLightbox: InstanceType<typeof PhotoSwipeLightbox> | null = null;
 
+  let activeCountry: string | null = null;
+  let reapplyTagFilter: (() => void) = () => {};
+
   function initGallery() {
     if (currentLightbox) {
       currentLightbox.destroy();
@@ -231,6 +234,10 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
     }
 
     function isMatch(wrapper: HTMLElement): boolean {
+      if (activeCountry) {
+        const wrapperCountry = (wrapper.dataset.country ?? '').toLowerCase();
+        if (wrapperCountry !== activeCountry.toLowerCase()) return false;
+      }
       if (activeTags.size === 0) return true;
       const tags = (wrapper.dataset.tags ?? '').split(',').filter(Boolean);
       return [...activeTags].every((t) => tags.includes(t));
@@ -331,6 +338,8 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
       applyFilters();
       updateCompatibleTags();
     });
+
+    reapplyTagFilter = applyFilters;
   }
 
   function initCountryFilter() {
@@ -341,38 +350,36 @@ const allTags = [...new Set(photosWithFull.flatMap((p) => p.data.tags ?? []))].s
 
     if (!country || !pill) return;
 
+    // Set shared state so the tag filter's isMatch() is aware of country restriction
+    activeCountry = country;
+
     // Show pill (XSS-safe)
     pill.classList.remove('hidden');
     const span = document.createElement('span');
     span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
-
     const label = document.createElement('span');
     label.textContent = 'Showing: ';
-
     const strong = document.createElement('strong');
     strong.textContent = country;
-
     const clearBtn = document.createElement('button');
-    clearBtn.id = 'clear-country-filter';
     clearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
     clearBtn.setAttribute('aria-label', 'Clear country filter');
     clearBtn.textContent = '×';
-
     label.appendChild(strong);
     span.appendChild(label);
     span.appendChild(clearBtn);
     pill.appendChild(span);
 
     clearBtn.addEventListener('click', () => {
+      activeCountry = null;
       history.replaceState(null, '', window.location.pathname);
       pill.classList.add('hidden');
       pill.innerHTML = '';
-      wrappers.forEach((w) => {
-        w.style.display = '';
-      });
+      // Re-apply tag filter so only tag-filtered items are hidden (not all items)
+      reapplyTagFilter();
     });
 
-    // Hide non-matching entries
+    // Apply initial country filter (direct, no animation on page load)
     wrappers.forEach((wrapper) => {
       const wrapperCountry = wrapper.dataset.country ?? '';
       if (wrapperCountry.toLowerCase() !== country.toLowerCase()) {
