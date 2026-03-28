@@ -40,6 +40,12 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
   description={post.data.description}
   ogType="article"
 >
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <a href="/woodworking" data-astro-prefetch class="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+      ← All projects
+    </a>
+  </div>
+
   <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 bg-white rounded-xl shadow-md border border-gray-200 my-8 sm:my-12">
     <!-- Hero image -->
     <div class="rounded-lg overflow-hidden mb-8 shadow-lg animate-fade-in">
@@ -87,5 +93,12 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
         <ModelViewer client:idle src={modelSrc} mtl={modelMtl} upAxis={post.data.modelUpAxis} />
       </section>
     )}
+
+    <!-- Back link -->
+    <div class="mt-10 pt-6 border-t border-gray-100">
+      <a href="/woodworking" data-astro-prefetch class="text-sm text-gray-400 hover:text-gray-600 transition-colors">
+        ← All projects
+      </a>
+    </div>
   </article>
 </Layout>
