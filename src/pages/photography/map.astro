@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import PhotoGlobe from '../../components/PhotoGlobe.svelte';
+
+const photos = (await getCollection('photography')).filter(
+  (p) => !p.data.draft && !!p.data.country
+);
+
+const countryCounts: Record<string, number> = {};
+for (const photo of photos) {
+  const c = photo.data.country!;
+  countryCounts[c] = (countryCounts[c] ?? 0) + 1;
+}
+
+const countryCount = Object.keys(countryCounts).length;
+---
+
+<Layout
+  title="Photography Map"
+  description="A map of countries where Pieter Wittebol has taken photographs."
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <h1
+      class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2"
+      data-reveal="left"
+    >
+      Where I've Shot
+    </h1>
+    <p class="text-gray-500 mb-8">
+      {countryCount} {countryCount === 1 ? 'country' : 'countries'} so far
+    </p>
+
+    <div class="relative w-full rounded-xl overflow-hidden" style="height: 560px;">
+      <PhotoGlobe countries={countryCounts} client:only="svelte" />
+    </div>
+
+    <p class="mt-4 text-sm text-gray-400 text-center">
+      Click a highlighted country to browse its photos
+    </p>
+  </div>
+</Layout>
