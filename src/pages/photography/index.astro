@@ -123,9 +123,6 @@ for (const photo of photosWithFull) {
 
   let currentLightbox: InstanceType<typeof PhotoSwipeLightbox> | null = null;
 
-  let activeCountry: string | null = null;
-  let reapplyTagFilter: (() => void) = () => {};
-
   function initGallery() {
     if (currentLightbox) {
       currentLightbox.destroy();
@@ -168,6 +165,8 @@ for (const photo of photosWithFull) {
 
   function initFilters() {
     const activeTags = new Set<string>();
+    let activeCountry: string | null = null;
+
     const tagButtons = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
     const wrappers = document.querySelectorAll<HTMLElement>('[data-entry-wrapper]');
     const toggleBtn = document.querySelector<HTMLButtonElement>('#filter-toggle');
@@ -175,6 +174,7 @@ for (const photo of photosWithFull) {
     const panel = document.querySelector<HTMLElement>('#filter-panel');
     const countBadge = document.querySelector<HTMLElement>('#filter-count');
     const chevron = document.querySelector<SVGElement>('#filter-chevron');
+    const pill = document.getElementById('country-pill');
 
     if (!toggleBtn || !panel) return;
 
@@ -242,7 +242,7 @@ for (const photo of photosWithFull) {
     function isMatch(wrapper: HTMLElement): boolean {
       if (activeCountry) {
         const wrapperCountry = (wrapper.dataset.country ?? '').toLowerCase();
-        if (wrapperCountry !== activeCountry.toLowerCase()) return false;
+        if (wrapperCountry !== activeCountry) return false;
       }
       if (activeTags.size === 0) return true;
       const tags = (wrapper.dataset.tags ?? '').split(',').filter(Boolean);
@@ -320,6 +320,38 @@ for (const photo of photosWithFull) {
       });
     }
 
+    function setCountry(country: string | null) {
+      activeCountry = country ? country.toLowerCase() : null;
+
+      if (!pill) return;
+
+      if (activeCountry && country) {
+        pill.classList.remove('hidden');
+        pill.innerHTML = '';
+        const span = document.createElement('span');
+        span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
+        const label = document.createElement('span');
+        label.textContent = 'Showing: ';
+        const strong = document.createElement('strong');
+        strong.textContent = country;
+        const pillClearBtn = document.createElement('button');
+        pillClearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
+        pillClearBtn.setAttribute('aria-label', 'Clear country filter');
+        pillClearBtn.textContent = '×';
+        pillClearBtn.addEventListener('click', () => setCountry(null));
+        label.appendChild(strong);
+        span.appendChild(label);
+        span.appendChild(pillClearBtn);
+        pill.appendChild(span);
+      } else {
+        pill.classList.add('hidden');
+        pill.innerHTML = '';
+      }
+
+      applyFilters();
+      updateCompatibleTags();
+    }
+
     tagButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const tag = btn.dataset.tag!;
@@ -345,58 +377,13 @@ for (const photo of photosWithFull) {
       updateCompatibleTags();
     });
 
-    reapplyTagFilter = applyFilters;
-  }
-
-  function initCountryFilter() {
-    const params = new URLSearchParams(window.location.search);
-    const country = params.get('country');
-    const pill = document.getElementById('country-pill');
-    const wrappers = document.querySelectorAll<HTMLElement>('[data-entry-wrapper]');
-
-    if (!country || !pill) return;
-
-    // Set shared state so the tag filter's isMatch() is aware of country restriction
-    activeCountry = country.toLowerCase();
-
-    // Show pill (XSS-safe)
-    pill.classList.remove('hidden');
-    const span = document.createElement('span');
-    span.className = 'inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700';
-    const label = document.createElement('span');
-    label.textContent = 'Showing: ';
-    const strong = document.createElement('strong');
-    strong.textContent = country;
-    const clearBtn = document.createElement('button');
-    clearBtn.className = 'ml-1 text-gray-400 hover:text-gray-700 cursor-pointer leading-none';
-    clearBtn.setAttribute('aria-label', 'Clear country filter');
-    clearBtn.textContent = '×';
-    label.appendChild(strong);
-    span.appendChild(label);
-    span.appendChild(clearBtn);
-    pill.appendChild(span);
-
-    clearBtn.addEventListener('click', () => {
-      activeCountry = null;
-      history.replaceState(null, '', window.location.pathname);
-      pill.classList.add('hidden');
-      pill.innerHTML = '';
-      // Re-apply tag filter so only tag-filtered items are hidden (not all items)
-      reapplyTagFilter();
-    });
-
-    // Apply initial country filter (direct, no animation on page load)
-    wrappers.forEach((wrapper) => {
-      const wrapperCountry = wrapper.dataset.country ?? '';
-      if (wrapperCountry.toLowerCase() !== activeCountry) {
-        wrapper.style.display = 'none';
-      }
+    document.addEventListener('country-select', (e: Event) => {
+      const country = (e as CustomEvent<{ country: string }>).detail.country;
+      setCountry(country);
+      document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
     });
   }
 
-  // initFilters must run before initCountryFilter so reapplyTagFilter is assigned
-  // before the country filter's clear handler can invoke it.
   document.addEventListener('astro:page-load', initGallery);
   document.addEventListener('astro:page-load', initFilters);
-  document.addEventListener('astro:page-load', initCountryFilter);
 </script>
