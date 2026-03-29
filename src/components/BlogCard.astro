@@ -31,12 +31,11 @@ const formattedDate = date.toLocaleDateString('en-GB', {
       class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
       loading="lazy"
       decoding="async"
-      transition:name={`cover-${slug}`}
     />
   </div>
   <div class="p-5">
     <time datetime={date.toISOString()} class="text-xs text-gray-400">{formattedDate}</time>
-    <h2 class="text-lg font-bold text-gray-900 group-hover:text-amber-700 mt-1 mb-2" transition:name={`title-${slug}`}>
+    <h2 class="text-lg font-bold text-gray-900 group-hover:text-amber-700 mt-1 mb-2">
       {title}
     </h2>
     <p class="text-sm text-gray-500 mb-3">{description}</p>

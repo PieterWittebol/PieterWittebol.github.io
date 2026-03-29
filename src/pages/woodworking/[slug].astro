@@ -58,7 +58,6 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
         quality={85}
         class="w-full h-auto"
         decoding="async"
-        transition:name={`cover-${post.id}`}
       />
     </div>
 
@@ -67,7 +66,7 @@ const formattedDate = post.data.date.toLocaleDateString('en-GB', {
       <time datetime={post.data.date.toISOString()} class="text-sm text-gray-400">
         {formattedDate}
       </time>
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2 mb-4" transition:name={`title-${post.id}`}>
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2 mb-4">
         {post.data.title}
       </h1>
       {post.data.tags.length > 0 && (
