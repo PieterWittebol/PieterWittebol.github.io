@@ -12,6 +12,7 @@ You are an expert in Astro 5 and Svelte 5. Review components and pages for the f
   - `client:load` — only for above-the-fold interactive components
   - `client:visible` — prefer this for below-the-fold components (PhotoSwipe gallery, etc.)
   - `client:idle` — for low-priority interactivity
+  - `client:only="svelte"` — **required** for `PhotoGlobe.svelte`; WebGL cannot initialise server-side, so any other directive will cause a build error or blank render
 - Content collection queries must use `getCollection()` and filter drafts in production: `(await getCollection('photography')).filter(p => !p.data.draft)` — missing this filter exposes draft posts on the live site
 - Frontmatter in `.md` files must match the schemas in `src/content.config.ts` exactly — check required vs optional fields
 
@@ -19,6 +20,7 @@ You are an expert in Astro 5 and Svelte 5. Review components and pages for the f
 
 - Use runes syntax (`$state`, `$derived`, `$effect`, `$props`) — not legacy `let`/`$:` reactive syntax
 - Check that PhotoSwipe integration initializes correctly and cleans up on component destroy
+- `PhotoGlobe.svelte` must call `globe.value?._destructor()` inside `onDestroy` — omitting this leaks the WebGL context and causes GPU memory pressure on repeated navigation
 
 ## Styling checks
 
