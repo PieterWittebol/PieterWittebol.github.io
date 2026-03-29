@@ -41,10 +41,26 @@ for (const photo of photosWithFull) {
       </h1>
     </div>
 
-    <div class="relative w-full rounded-xl overflow-hidden h-[400px] sm:h-[560px] mb-4">
-      <PhotoGlobe countries={countryCounts} client:only="svelte" />
+    <div class="mb-10">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-400">Explore by location — click a country to filter</span>
+        <button
+          id="globe-toggle"
+          class="flex items-center text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+          aria-expanded="true"
+          aria-controls="globe-panel"
+        >
+          <svg id="globe-chevron" class="w-3.5 h-3.5 transition-transform duration-300" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,4 6,8 10,4" />
+          </svg>
+        </button>
+      </div>
+      <div id="globe-panel">
+        <div class="relative w-full rounded-xl overflow-hidden h-[220px] sm:h-[280px]">
+          <PhotoGlobe countries={countryCounts} client:only="svelte" />
+        </div>
+      </div>
     </div>
-    <p class="mb-10 text-sm text-gray-400 text-center">Click a country to filter photos</p>
 
     {allTags.length > 0 && (
       <div class="mb-14">
