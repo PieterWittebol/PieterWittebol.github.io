@@ -11,7 +11,9 @@ Personal website for [wittebol.be](https://wittebol.be) — a portfolio and blog
 ## Tech Stack
 
 - [Astro 5](https://astro.build) — static site generator
-- [Svelte 5](https://svelte.dev) — interactive components (mobile nav)
+- [Svelte 5](https://svelte.dev) — interactive components (globe, gallery, mobile nav)
+- [globe.gl](https://globe.gl) — WebGL 3D globe for the photography map
+- [Three.js](https://threejs.org) — 3D rendering (used by globe.gl and model viewer)
 - [Tailwind CSS 4](https://tailwindcss.com) — utility-first styling
 - [PhotoSwipe 5](https://photoswipe.com) — image gallery lightbox
 - [Sharp](https://sharp.pixelplumbing.com) — image optimization via `astro:assets`
@@ -25,6 +27,9 @@ src/
 │   ├── Footer.astro      Site footer
 │   ├── Nav.svelte        Mobile hamburger menu
 │   ├── PhotoCard.astro   Photo gallery thumbnail
+│   ├── PhotoEntry.astro  Single photo in gallery view
+│   ├── PhotoGlobe.svelte Interactive 3D globe (globe.gl + Three.js)
+│   ├── ModelViewer.svelte 3D model viewer for woodworking projects
 │   ├── BlogCard.astro    Blog post card
 │   └── SEO.astro         Meta/OG tags
 ├── content/            Markdown content collections
@@ -47,7 +52,7 @@ src/
 
 All content is managed via Markdown files in `src/content/`:
 
-- **Photography**: one `.md` file per photo with frontmatter (title, date, location, camera, tags) and a co-located image
+- **Photography**: one `.md` file per photo with frontmatter (`title`, `date`, `image`, `tags`; optionals: `location`, `country`, `camera`, `draft`, `background`) and a co-located image. Set `background: true` for photos eligible to appear in the landing page hero. Set `country` to enable globe filtering.
 - **Woodworking**: one folder per post with `index.md` and an `images/` directory for inline photos
 - **About**: a single `index.md` with structured CV data in YAML frontmatter and an intro paragraph as the body
 
