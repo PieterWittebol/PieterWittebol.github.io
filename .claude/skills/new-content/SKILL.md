@@ -12,7 +12,9 @@ Ask the user:
 For **photography**, also ask:
 - Image file path — used both to run analysis and as the co-located asset
 - Location (optional)
+- Country (optional) — ISO country name (e.g. "Belgium", "South Africa"); enables globe filtering on /photography
 - Camera (optional)
+- Background? (optional, default false) — set to `true` if this photo should be eligible for the landing page hero rotation
 
 For **woodworking**, also ask:
 - Short description (one sentence)
@@ -69,8 +71,10 @@ date: <YYYY-MM-DD>
 image: ./<image-filename>
 tags: [<tags>]
 location: "<location>"       # omit line if not provided
+country: "<country>"         # omit line if not provided
 camera: "<camera>"           # omit line if not provided
 draft: false
+background: false            # set true to include in landing page hero rotation
 ---
 ```
 
