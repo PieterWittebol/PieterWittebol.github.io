@@ -10,9 +10,15 @@ experience:
       - role: Security Automation Engineer
         company: KBC Bank
         period: January 2026 – Present
+        description: >-
+          Designing and implementing security automation solutions to enhance
+          KBC's cybersecurity posture, including the development of custom integration with 
+          privileged access management systems.
       - role: MFT Systems Engineer
         company: KBC Bank
         period: June 2021 – December 2025
+        description: >-
+          Managed and maintained KBC's managed file transfer (MFT) solution.
       - role: Automation Engineer
         company: ST Engineering iDirect
         period: November 2020 – May 2021
@@ -29,7 +35,7 @@ experience:
         description: >-
           Managed over 900 servers using industry standard SCM tools.
           Scripting in Bash, Python, PowerShell, and Perl.
-      - role: Medior System Engineer / PSA
+      - role: Medior System Engineer
         company: Telesafe
         period: June 2016 – September 2018
         description: >-
